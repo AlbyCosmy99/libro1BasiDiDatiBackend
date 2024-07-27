@@ -42,4 +42,27 @@ pagesRouter.put('/:page', async (req, res) => {
     }
 });
 
+pagesRouter.delete('/:page', async (req, res) => {
+    try {
+        let page = await pageModel.findOne({ name: req.params.page });
+        if (page) {
+            await pageModel.deleteOne({ name: req.params.page });
+            return res.status(200).json({
+                "message": "Page successfully deleted."
+            });
+        } 
+        else {
+            return res.status(404).json({
+                "message": "Page not found.",
+                "error": error.message
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            "message": "An error occurred.",
+            "error": error.message
+        });
+    }
+});
+
 export default pagesRouter
