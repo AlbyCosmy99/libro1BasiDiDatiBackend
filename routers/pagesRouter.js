@@ -34,7 +34,6 @@ pagesRouter.put('/:page', async (req, res) => {
             { html: html },
             { new: true }
         );
-        console.log(updatedPage.html)
         return res.send(updatedPage.html);
     } catch (error) {
         console.error(error);
