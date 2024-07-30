@@ -14,9 +14,15 @@ pagesRouter.get('/:page', async (req,res) => {
 })
 
 pagesRouter.post('/:page', async (req,res) => {
+    let html = req.body.html
+    if(!html) {
+        const justCreated = await pageModel.find({"name": "pageJustCreated"})
+        html = justCreated[0].html
+    }
+
     const page = new pageModel({
         "name": req.params.page,
-        "html": req.body.html,
+        "html": html,
         "isNavbarOption": req.body.isNavbarOption
     })
     await page.save()
@@ -26,7 +32,11 @@ pagesRouter.post('/:page', async (req,res) => {
 
 pagesRouter.put('/:page', async (req, res) => {
     const page = req.params.page;
-    const html = req.body.html;
+    let html = req.body.html
+    if(!html) {
+        const notFoundPage = await pageModel.find({"name": "notFound"})
+        html = notFoundPage[0].html
+    }
 
     try {
         let updatedPage = await pageModel.findOneAndUpdate(
